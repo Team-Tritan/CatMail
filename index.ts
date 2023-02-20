@@ -33,15 +33,15 @@ const catmail = nodemailer.createTransport({
 
 async function sendCatz() {
   try {
-    const {
+    let {
       data: { file: catImageUrl },
     } = await axios.get("https://aws.random.cat/meow");
 
-    const { data: catImage } = await axios.get(catImageUrl, {
+    let { data: catImage } = await axios.get(catImageUrl, {
       responseType: "arraybuffer",
     });
 
-    const mailOptions = {
+    let body = {
       from: config.server.user,
       to: config.send_to,
       subject: `cat ${counter + 1} !!!`,
@@ -56,7 +56,7 @@ async function sendCatz() {
       ],
     };
 
-    await catmail.sendMail(mailOptions);
+    await catmail.sendMail(body);
     console.log(`cat ${counter + 1} sent via catmail!!!`);
     counter++;
   } catch (error) {
