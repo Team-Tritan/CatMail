@@ -1,28 +1,24 @@
-import * as nodemailer from "nodemailer";
+import nodemailer from "nodemailer";
 import axios from "axios";
 import { config } from "./config";
 import figlet from "figlet";
 
 let counter: number = 0;
 
-console.log(
-  figlet.textSync("Catmail", {
-    font: "Standard",
-    horizontalLayout: "default",
-    verticalLayout: "default",
-    width: 80,
-    whitespaceBreak: true,
-  })
-);
+console.log(`
+${figlet.textSync("Catmail", {
+  font: "Standard",
+  horizontalLayout: "default",
+  verticalLayout: "default",
+  width: 80,
+  whitespaceBreak: true,
+})}
+________________________________________
+Catmail Starting -- Sending ${config.total_emails} cats to ${config.send_to}.
+----------------------------------------
+`);
 
-console.log(
-  `%c ________________________________________
- <Catmail Starting -- Sending ${config.total_emails} cats to ${config.send_to}>
- ----------------------------------------`,
-  "font-family:monospace"
-);
-
-let catmail = nodemailer.createTransport({
+const catmail = nodemailer.createTransport({
   host: config.server.hostname,
   port: config.server.port,
   secure: config.server.tls,
@@ -37,10 +33,11 @@ let catmail = nodemailer.createTransport({
 
 async function sendCatz() {
   try {
-    let response = await axios.get("https://aws.random.cat/meow");
-    let catImageUrl = response.data.file;
+    const {
+      data: { file: catImageUrl },
+    } = await axios.get("https://aws.random.cat/meow");
 
-    let { data: catImage } = await axios.get(catImageUrl, {
+    const { data: catImage } = await axios.get(catImageUrl, {
       responseType: "arraybuffer",
     });
 
@@ -48,7 +45,7 @@ async function sendCatz() {
       from: config.server.user,
       to: config.send_to,
       subject: `cat ${counter + 1} !!!`,
-      html: `<p> Someone wants you to have many cat pictures my friend. Here is cat ${
+      html: `<p> Someone wants you to have many cat pictures my friend. Here is cat #${
         counter + 1
       }!!! </p>`,
       attachments: [
@@ -61,13 +58,14 @@ async function sendCatz() {
 
     await catmail.sendMail(mailOptions);
     console.log(`cat ${counter + 1} sent via catmail!!!`);
+    counter++;
   } catch (error) {
     return console.error(error);
   }
-
-  counter++;
 }
 
 (async () => {
-  for (let i = 0; i < config.total_emails; i++) await sendCatz();
+  for await (const _ of Array(config.total_emails)) {
+    await sendCatz();
+  }
 })();
