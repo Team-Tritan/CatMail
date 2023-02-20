@@ -4,7 +4,7 @@ Spam pictures of cats to someone's email. That is literally all.
 
 # Setup/Starting
 
-- Have nodejs
+- Install node
 - Install typescript, ts-node, and yarn globally
   - `npm i typescript ts-node yarn -g`
 - Install all dependancies
