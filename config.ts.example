@@ -14,14 +14,14 @@ interface Config {
 }
 
 export let config: Config = {
-  send_to: "",
+  send_to: "email@example.tld",
   total_emails: 100,
 
   server: {
-    hostname: "",
+    hostname: "mail.example.tld",
     port: 465,
     tls: true,
-    user: "",
-    pass: "",
+    user: "username@email.tld",
+    pass: "AAAAAAA",
   },
 };
