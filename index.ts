@@ -22,7 +22,7 @@ console.log(
   "font-family:monospace"
 );
 
-let transporter = nodemailer.createTransport({
+let catmail = nodemailer.createTransport({
   host: config.server.hostname,
   port: config.server.port,
   secure: config.server.tls,
@@ -35,7 +35,7 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-const sendCatz = async () => {
+async function sendCatz() {
   try {
     let response = await axios.get("https://aws.random.cat/meow");
     let catImageUrl = response.data.file;
@@ -59,17 +59,15 @@ const sendCatz = async () => {
       ],
     };
 
-    await transporter.sendMail(mailOptions);
+    await catmail.sendMail(mailOptions);
     console.log(`cat ${counter + 1} sent via catmail!!!`);
   } catch (error) {
     return console.error(error);
   }
 
   counter++;
-};
+}
 
 (async () => {
-  for (let i = 0; i < config.total_emails; i++) {
-    await sendCatz();
-  }
+  for (let i = 0; i < config.total_emails; i++) await sendCatz();
 })();
