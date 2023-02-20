@@ -48,10 +48,12 @@ const sendCatz = async () => {
       from: config.server.user,
       to: config.send_to,
       subject: `cat ${counter + 1} !!!`,
-      html: `cat ${counter + 1} !!!`,
+      html: `<p> Someone wants you to have many cat pictures my friend. Here is cat ${
+        counter + 1
+      }!!! </p>`,
       attachments: [
         {
-          filename: "cat.jpg",
+          filename: `cat-${counter + 1}.jpg`,
           content: catImage,
         },
       ],
