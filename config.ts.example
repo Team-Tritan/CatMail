@@ -1,0 +1,27 @@
+"use strict";
+
+interface Config {
+  send_to: string;
+  total_emails: number;
+
+  server: {
+    hostname: string;
+    port: number;
+    tls: boolean;
+    user: string;
+    pass: string;
+  };
+}
+
+export let config: Config = {
+  send_to: "",
+  total_emails: 100,
+
+  server: {
+    hostname: "",
+    port: 465,
+    tls: true,
+    user: "",
+    pass: "",
+  },
+};
